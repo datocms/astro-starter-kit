@@ -1,7 +1,7 @@
 ---
 import { type FragmentOf, readFragment } from '~/lib/datocms/graphql';
 import { ImageBlockFragment } from './fragments';
-import ResponsiveImage from '~/components/ResponsiveImage/index.astro';
+import { ResponsiveImage } from '~/components/ResponsiveImage';
 
 interface Props {
   block: FragmentOf<typeof ImageBlockFragment>;
