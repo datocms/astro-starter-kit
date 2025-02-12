@@ -3,6 +3,15 @@ import { SECRET_API_TOKEN } from 'astro:env/server';
 import { enableDraftMode } from '~/lib/draftMode';
 import { handleUnexpectedError, invalidRequestResponse } from '../../utils';
 
+const isExternalOrInvalidUrl = (url: string, hostname: string) => {
+  try {
+    const parsed = new URL(url, `http://${hostname}`);
+    return parsed.hostname !== hostname;
+  } catch {
+    return true;
+  }
+};
+
 /**
  * This route handler enables Draft Mode and redirects to the given URL.
  */
@@ -20,14 +29,8 @@ export const GET: APIRoute = (event) => {
     }
 
     // Avoid open redirect vulnerabilities
-    if (redirectUrl) {
-      if (
-        redirectUrl.startsWith('http://') ||
-        redirectUrl.startsWith('https://') ||
-        redirectUrl.startsWith('//')
-      ) {
-        return invalidRequestResponse('URL must be relative!', 422);
-      }
+    if (redirectUrl && isExternalOrInvalidUrl(redirectUrl, event.url.hostname)) {
+      return invalidRequestResponse('URL must be relative!', 422);
     }
 
     enableDraftMode(event);
