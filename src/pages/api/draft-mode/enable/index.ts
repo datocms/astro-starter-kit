@@ -3,7 +3,7 @@ import { SECRET_API_TOKEN } from 'astro:env/server';
 import { enableDraftMode } from '~/lib/draftMode';
 import { handleUnexpectedError, invalidRequestResponse } from '../../utils';
 
-const isExternalOrInvalidUrl = (url: string, hostname: string) => {
+const isExternalOrInvalidUrl = (url: string, hostname: string):boolean => {
   try {
     const parsed = new URL(url, `http://${hostname}`);
     return parsed.hostname !== hostname;
