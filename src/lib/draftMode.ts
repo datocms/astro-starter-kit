@@ -18,9 +18,8 @@ function jwtToken() {
 export function enableDraftMode(context: APIContext) {
   context.cookies.set(DRAFT_MODE_COOKIE_NAME, jwtToken(), {
     path: '/',
-    sameSite: 'none',
+    sameSite: 'lax',
     httpOnly: false,
-    ...({ partitioned: true } as AstroCookieSetOptions),
   });
 }
 
@@ -30,9 +29,8 @@ export function enableDraftMode(context: APIContext) {
 export function disableDraftMode(context: APIContext) {
   context.cookies.delete(DRAFT_MODE_COOKIE_NAME, {
     path: '/',
-    sameSite: 'none',
+    sameSite: 'lax',
     httpOnly: false,
-    ...({ partitioned: true } as AstroCookieSetOptions),
   });
 }
 

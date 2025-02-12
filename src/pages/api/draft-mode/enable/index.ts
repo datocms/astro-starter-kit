@@ -11,7 +11,7 @@ export const GET: APIRoute = (event) => {
 
   // Parse query string parameters
   const token = url.searchParams.get('token');
-  const redirectUrl = url.searchParams.get('url') || '/';
+  const redirectUrl = url.searchParams.get('url');
 
   try {
     // Ensure that the request is coming from a trusted source
@@ -20,13 +20,24 @@ export const GET: APIRoute = (event) => {
     }
 
     // Avoid open redirect vulnerabilities
-    if (redirectUrl.startsWith('http://') || redirectUrl.startsWith('https://')) {
-      return invalidRequestResponse('URL must be relative!', 422);
+    if (redirectUrl) {
+      if (
+        redirectUrl.startsWith('http://') ||
+        redirectUrl.startsWith('https://') ||
+        redirectUrl.startsWith('//')
+      ) {
+        return invalidRequestResponse('URL must be relative!', 422);
+      }
     }
 
     enableDraftMode(event);
   } catch (error) {
     return handleUnexpectedError(error);
+  }
+
+  // If no redirect URL, just set the cookie and return a 204 no content
+  if (!redirectUrl) {
+    return new Response(null, { status: 204 });
   }
 
   return event.redirect(redirectUrl, 307);
