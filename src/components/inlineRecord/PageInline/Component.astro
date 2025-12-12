@@ -11,6 +11,6 @@ const { record } = Astro.props;
 const unmaskedRecord = readFragment(PageInlineFragment, record);
 ---
 
-<a href="/" class="pill">
+<a href={`/page/${unmaskedRecord.slug}`} class="pill">
   {unmaskedRecord.title}
 </a>

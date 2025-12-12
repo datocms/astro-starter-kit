@@ -16,4 +16,4 @@ const { node: _node, record, attrs } = Astro.props;
 const unmaskedRecord = readFragment(PageLinkFragment, record);
 ---
 
-<a {...attrs} href="/" title={unmaskedRecord.title}><slot /></a>
+<a {...attrs} href={`/page/${unmaskedRecord.slug}`} title={unmaskedRecord.title}><slot /></a>

@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "prepare": "npx simple-git-hooks && npm run generate-schema",
+    "prepare": "npx simple-git-hooks && npm run generate-schema && npm run generate-cma-types",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",

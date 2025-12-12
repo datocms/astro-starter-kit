@@ -22,13 +22,13 @@ import type { AnyModel } from './cma-types';
  */
 
 export function recordToWebsiteRoute(
-  _item: RawApiTypes.Item<AnyModel>,
+  item: RawApiTypes.Item<AnyModel>,
   itemTypeApiKey: string,
-  _locale: string,
+  locale: string,
 ): string | null {
   switch (itemTypeApiKey) {
     case 'page': {
-      return '/';
+      return `/page/${recordToSlug(item, itemTypeApiKey, locale)}`;
     }
     /*
      * Add cases for other models as needed. For example, if you add an
@@ -54,7 +54,7 @@ export function recordToSlug(
        * Using generated types, TypeScript knows which fields exist on each model.
        * Access fields directly without type casting.
        */
-      return item.attributes.title;
+      return item.attributes.slug;
     }
     /*
      * Add cases for other models as needed. For example, if you add an
