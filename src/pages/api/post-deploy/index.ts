@@ -8,7 +8,7 @@ import { handleUnexpectedError, successfulResponse, withCORS } from '../utils';
  * this project, to set up some DatoCMS settings. Feel free to remove it!
  */
 
-export const OPTIONS: APIRoute = ({ request }) => {
+export const OPTIONS: APIRoute = () => {
   return new Response('OK', withCORS());
 };
 

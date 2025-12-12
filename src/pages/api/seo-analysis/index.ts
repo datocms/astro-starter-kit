@@ -2,11 +2,12 @@ import { buildClient } from '@datocms/cma-client';
 import type { APIRoute } from 'astro';
 import { DATOCMS_CMA_TOKEN, SECRET_API_TOKEN } from 'astro:env/server';
 import { parse } from 'node-html-parser';
+import type { AnyModel } from '~/lib/datocms/cma-types';
 import { recordToSlug, recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
 import { draftModeHeaders } from '~/lib/draftMode';
 import { handleUnexpectedError, invalidRequestResponse, json, withCORS } from '../utils';
 
-export const OPTIONS: APIRoute = ({ request }) => {
+export const OPTIONS: APIRoute = () => {
   return new Response('OK', withCORS());
 };
 
@@ -56,12 +57,12 @@ export const GET: APIRoute = async ({ url }) => {
       environment: sandboxEnvironmentId,
     });
 
-    const { data: item } = await client.items.rawFind(itemId);
+    const { data: item } = await client.items.rawFind<AnyModel>(itemId);
 
     // We can use this info to generate the frontend URL, and the page slug
-    const websitePath = await recordToWebsiteRoute(item, itemTypeApiKey, locale);
+    const websitePath = recordToWebsiteRoute(item, itemTypeApiKey, locale);
 
-    const slug = await recordToSlug(item, itemTypeApiKey, locale);
+    const slug = recordToSlug(item, itemTypeApiKey, locale);
 
     if (!websitePath) {
       return invalidRequestResponse(

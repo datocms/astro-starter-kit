@@ -20,6 +20,8 @@ This project aims to be a great starting point for your Astro projects that need
 - 🧩 **Plugin ready** — Support for the fantastic plugins [Web Previews](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) and [SEO/Readability Analysis](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-seo-readability-analysis).
 - 🔄 **DatoCMS's Real-time Updates API** — Your editors can see updated content instantly as soon as you save a new version on DatoCMS.
 - 🌐 **SEO Metadata** — Full integration between Astro and the SEO settings coming from DatoCMS.
+- 📦 Official CDA Client — Uses @datocms/cda-client for performant, type-safe GraphQL queries to the Content Delivery API.
+- 🔒 Type-Safe CMA Client — Uses @datocms/cma-client with auto-generated types from your schema for full autocomplete and compile-time safety.
 
 ## How to use
 
@@ -66,6 +68,18 @@ npm run dev
 ```
 
 Your website should be up and running on [http://localhost:4321](http://localhost:4321)!
+
+#### Generate CMA types (optional)
+
+To get full type-safety when working with the Content Management API:
+
+```bash
+npm run generate-cma-types
+```
+
+This generates TypeScript types from your DatoCMS schema in `src/lib/datocms/cma-types.ts`. Run this command again whenever your schema changes to keep types in sync.
+
+See: [Type-safe development with TypeScript](https://www.datocms.com/docs/content-management-api/resources/item#type-safe-development-with-typescript)
 
 ## VS Code
 
