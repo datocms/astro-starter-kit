@@ -26,6 +26,10 @@ export default defineConfig({
         context: 'server',
         access: 'secret',
       }),
+      DATOCMS_BASE_EDITING_URL: envField.string({
+        context: 'server',
+        access: 'public',
+      }),
       SECRET_API_TOKEN: envField.string({
         context: 'server',
         access: 'secret',

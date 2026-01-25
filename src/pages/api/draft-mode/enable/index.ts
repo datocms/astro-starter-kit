@@ -11,7 +11,7 @@ export const GET: APIRoute = (event) => {
 
   // Parse query string parameters
   const token = url.searchParams.get('token');
-  const redirectUrl = url.searchParams.get('url') || '/';
+  const redirectUrl = url.searchParams.get('redirect') || '/';
 
   try {
     // Ensure that the request is coming from a trusted source

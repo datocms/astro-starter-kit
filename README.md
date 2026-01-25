@@ -17,7 +17,8 @@ This project aims to be a great starting point for your Astro projects that need
 - 🛠️ **Minimal boilerplate** — The project is minimal and exposes only what is necessary to get started, without complicated models that need to be removed.
 - 🚫 **Zero CSS** — There is only one CSS import, which you can remove to use your preferred CSS tool.
 - 📝 **Full support for Draft Mode** — Your editors can always view the latest draft version of the content.
-- 🧩 **Plugin ready** — Support for the fantastic plugins [Web Previews](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) and [SEO/Readability Analysis](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-seo-readability-analysis).
+- ✏️ **Click-to-edit overlays** — Integrated [@datocms/content-link](https://www.npmjs.com/package/@datocms/content-link) for intuitive content editing. Click on any content element on your website to instantly open the DatoCMS editor for that specific field.
+- 🧩 **Plugin ready** — Full integration with the [Web Previews](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) plugin, including Visual Editing mode for seamless in-context editing, and [SEO/Readability Analysis](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-seo-readability-analysis).
 - 🔄 **DatoCMS's Real-time Updates API** — Your editors can see updated content instantly as soon as you save a new version on DatoCMS.
 - 🌐 **SEO Metadata** — Full integration between Astro and the SEO settings coming from DatoCMS.
 - 📦 Official CDA Client — Uses @datocms/cda-client for performant, type-safe GraphQL queries to the Content Delivery API.
@@ -54,6 +55,7 @@ Copy the values of the following tokens into the specified environment variable:
 - `DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN`: CDA Only (Published)
 - `DATOCMS_DRAFT_CONTENT_CDA_TOKEN`: CDA Only (Draft)
 - `DATOCMS_CMA_TOKEN`: CMA Only (Read)
+- `DATOCMS_BASE_EDITING_URL`: Your DatoCMS project URL (e.g., `https://your-project.admin.datocms.com`). This enables click-to-edit overlays that link content directly to the DatoCMS editor.
 
 Then set both `SECRET_API_TOKEN` and `SIGNED_COOKIE_JWT_SECRET` by generating two different secure strings (you can use `openssl rand -hex 32` or any other cryptographically-secure random string generator):
 
@@ -80,6 +82,39 @@ npm run generate-cma-types
 This generates TypeScript types from your DatoCMS schema in `src/lib/datocms/cma-types.ts`. Run this command again whenever your schema changes to keep types in sync.
 
 See: [Type-safe development with TypeScript](https://www.datocms.com/docs/content-management-api/resources/item#type-safe-development-with-typescript)
+
+## Click-to-edit overlays
+
+This starter kit includes [@datocms/content-link](https://www.npmjs.com/package/@datocms/content-link), which provides intuitive click-to-edit overlays for your content.
+
+### How to use
+
+When viewing your website in draft mode, **press and hold the Alt/Option key** to enable click-to-edit mode. Interactive overlays will appear on all editable content. Release the key to disable the overlays.
+
+This feature works in two powerful ways:
+
+### 1. Standalone website editing
+
+Click on any content element to instantly open the DatoCMS editor for that specific field in a new tab. This makes it incredibly easy for editors to jump directly to the content they want to modify.
+
+### 2. Web Previews plugin Visual Editing mode
+
+When using the [Web Previews plugin](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) in Visual Editing mode, clicking on content opens the field editor in a side panel right next to your preview. The integration also enables:
+
+- **In-plugin navigation**: Users can navigate to different URLs within the Visual mode interface (like a browser navigation bar), and the preview automatically updates to show the corresponding page
+- **Synchronized state**: The preview and DatoCMS interface stay in perfect sync
+
+This bidirectional communication is established automatically when your preview runs inside the Web Previews plugin—no additional configuration needed.
+
+### How it works
+
+The implementation consists of three parts:
+
+1. **Data fetching** (`src/lib/datocms/executeQuery.ts:37`): When fetching draft content, the `contentLink: 'v1'` option embeds stega-encoded metadata into text fields
+2. **ContentLink component** (`src/components/ContentLink/Component.astro`): Creates interactive overlays and handles the Web Previews plugin integration
+3. **Layout integration** (`src/layouts/Layout.astro:55`): The ContentLink component is rendered only in draft mode
+
+For more details, see the [package documentation](https://www.npmjs.com/package/@datocms/content-link).
 
 ## VS Code
 

@@ -63,7 +63,7 @@ export const POST: APIRoute = async ({ url, request }) => {
              * We generate the URL in a way that it first passes through the
              * endpoint that enables the Draft Mode.
              */
-            `/api/draft-mode/enable?url=${recordUrl}&token=${token}`,
+            `/api/draft-mode/enable?redirect=${recordUrl}&token=${token}`,
             request.url,
           ).toString(),
         });
@@ -82,7 +82,7 @@ export const POST: APIRoute = async ({ url, request }) => {
              * We generate the URL in a way that it first passes through the
              * endpoint that disables the Draft Mode.
              */
-            `/api/draft-mode/disable?url=${recordUrl}`,
+            `/api/draft-mode/disable?redirect=${recordUrl}`,
             request.url,
           ).toString(),
         });

@@ -13,7 +13,7 @@ const { block } = Astro.props;
 const unmaskedBlock = readFragment(ImageBlockFragment, block);
 ---
 
-<figure>
+<figure data-datocms-content-link-group>
   {/* Display responsive image */}
   <ResponsiveImage data={unmaskedBlock.asset.responsiveImage} />
   {/* Display image title */}

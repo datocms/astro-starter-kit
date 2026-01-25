@@ -110,41 +110,46 @@ if (!page) {
      * of a significantly reduced and tailored set of possible tags
      * for editorial content, along with the capability to create hyperlinks
      * to other DatoCMS records and embed custom DatoCMS blocks.
+     *
+     * The data-datocms-content-link-group attribute enables ContentLink to
+     * properly handle click-to-edit for structured text and embedded blocks.
      */
   }
-  <StructuredText
-    data={page.structuredText}
-    blockComponents={/*
-     * If the structured text embeds any blocks, it's up to you to decide
-     * how to render them:
-     */
-    {
-      ImageBlockRecord: ImageBlock,
-      ImageGalleryBlockRecord: ImageGalleryBlock,
-      VideoBlockRecord: VideoBlock,
-    }}
-    linkToRecordComponents={/*
-     * If the structured text includes a link to another DatoCMS record,
-     * it's your decision to determine where the link should lead, or if
-     * you wish to customize its appearance:
-     */
-    {
-      PageRecord: PageLink,
-    }}
-    inlineRecordComponents={/*
-     * If the structured text includes a reference to another DatoCMS
-     * record, it's up to you to decide how to render them:
-     */
-    {
-      PageRecord: PageInline,
-    }}
-    nodeOverrides={/*
-     * You can also override the default rendering of certain nodes.
-     * In this case, we want to tweak the way headings (h1-h6) are rendered.
-     */ {
-      heading: HeadingWithAnchorLink,
-    }}
-  />
+  <div data-datocms-content-link-group>
+    <StructuredText
+      data={page.structuredText}
+      blockComponents={/*
+       * If the structured text embeds any blocks, it's up to you to decide
+       * how to render them:
+       */
+      {
+        ImageBlockRecord: ImageBlock,
+        ImageGalleryBlockRecord: ImageGalleryBlock,
+        VideoBlockRecord: VideoBlock,
+      }}
+      linkToRecordComponents={/*
+       * If the structured text includes a link to another DatoCMS record,
+       * it's your decision to determine where the link should lead, or if
+       * you wish to customize its appearance:
+       */
+      {
+        PageRecord: PageLink,
+      }}
+      inlineRecordComponents={/*
+       * If the structured text includes a reference to another DatoCMS
+       * record, it's up to you to decide how to render them:
+       */
+      {
+        PageRecord: PageInline,
+      }}
+      nodeOverrides={/*
+       * You can also override the default rendering of certain nodes.
+       * In this case, we want to tweak the way headings (h1-h6) are rendered.
+       */ {
+        heading: HeadingWithAnchorLink,
+      }}
+    />
+  </div>
   <footer>Published at {page._firstPublishedAt}</footer>
 
   <DraftModeQueryListener query={query} variables={{ slug }} />

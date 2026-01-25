@@ -13,7 +13,7 @@ const { block } = Astro.props;
 const unmaskedBlock = readFragment(VideoBlockFragment, block);
 ---
 
-<figure>
+<figure data-datocms-content-link-group>
   {/* Render the video player component */}
   <VideoPlayer data={unmaskedBlock.asset} />
   {/* Display the title of the video asset below the video player */}

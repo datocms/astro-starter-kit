@@ -13,11 +13,11 @@ const { block } = Astro.props;
 const unmaskedBlock = readFragment(ImageGalleryBlockFragment, block);
 ---
 
-<div class="gallery">
+<div class="gallery" data-datocms-content-link-boundary>
   <div>
     {
       unmaskedBlock.assets.map((asset) => (
-        <figure>
+        <figure data-datocms-content-link-group>
           {/* Display responsive image for each asset */}
           <ResponsiveImage data={asset.responsiveImage} imgStyle={{ width: 'auto' }} />
           {/* Display title for each asset */}
