@@ -26,10 +26,5 @@ const unmaskedData = readFragment(VideoPlayerFragment, data);
 }
 
 <div data-datocms-content-link-source={unmaskedData.video.alt}>
-  <VideoPlayer
-    {...rest}
-    data={unmaskedData.video}
-    accentColor="var(--bg-accent)"
-    client:visible
-  />
+  <VideoPlayer {...rest} data={unmaskedData.video} accentColor="var(--bg-accent)" client:visible />
 </div>
