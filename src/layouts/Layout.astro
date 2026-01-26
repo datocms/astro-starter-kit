@@ -76,11 +76,19 @@ const result = await executeQuery(query, { includeDrafts: draftModeEnabled });
       The enableClickToEdit prop activates click-to-edit mode immediately.
       Without it, editors can press Alt/Option key to temporarily enable it.
 
+      The `hoverOnly` option ensures click-to-edit is only enabled on devices with
+      hover capability (non-touch), avoiding interference with touch scrolling.
+
+      For more complex UI needs (e.g., a toolbar to toggle click-to-edit), the
+      `@datocms/content-link` package exposes a `createController` function for full
+      programmatic control.
+
       @see https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews
+      @see https://www.npmjs.com/package/@datocms/content-link
 
       */
     }
-    {draftModeEnabled && <ContentLink enableClickToEdit />}
+    {draftModeEnabled && <ContentLink enableClickToEdit={{ hoverOnly: true }} />}
 
     <header>
       <h1>DatoCMS + Astro Starter Kit</h1>
