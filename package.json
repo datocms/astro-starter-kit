@@ -20,7 +20,7 @@
     "@astrojs/react": "^4.4.2",
     "@datocms/astro": "^0.6.11",
     "@datocms/cda-client": "^0.2.10",
-    "@datocms/cma-client": "^5.2.6",
+    "@datocms/cma-client": "^5.2.7",
     "@mux/mux-player": "^3.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
