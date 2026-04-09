@@ -64,6 +64,17 @@ async function installSEOAnalysisPlugin(client: Client, baseUrl: string) {
   });
 }
 
+/**
+ * Install the private plugin hosted by this same project. The plugin entry
+ * point is the /private-datocms-plugin page, which DatoCMS loads in an iframe.
+ */
+async function installPrivatePlugin(client: Client, baseUrl: string) {
+  await client.plugins.create({
+    name: 'Private Plugin',
+    url: new URL('/private-datocms-plugin', baseUrl).toString(),
+  });
+}
+
 export const POST: APIRoute = async ({ request }) => {
   const body = await request.json();
 
@@ -74,6 +85,7 @@ export const POST: APIRoute = async ({ request }) => {
     await Promise.all([
       installWebPreviewsPlugin(client, baseUrl),
       installSEOAnalysisPlugin(client, baseUrl),
+      installPrivatePlugin(client, baseUrl),
     ]);
 
     return successfulResponse();
