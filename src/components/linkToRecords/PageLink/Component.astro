@@ -1,0 +1,27 @@
+---
+import type { ItemLink } from 'datocms-structured-text-utils';
+import { readFragment, type FragmentOf } from '~/lib/datocms/graphql';
+import type { TransformedMeta } from 'datocms-structured-text-generic-html-renderer';
+import { buildUrlForPage } from '~/lib/datocms/gqlUrlBuilder/page';
+import { PageLinkFragment } from './fragments';
+
+/*
+ * Link-to-record components own their visual representation; the URL is
+ * built by the per-model URL builder. Renderer-provided meta (e.g. target,
+ * rel) is honored via {...attrs}. Note: no
+ * `data-datocms-content-link-boundary` on link-to-record components — the
+ * renderer handles those boundaries.
+ */
+
+interface Props {
+  node: ItemLink;
+  record: FragmentOf<typeof PageLinkFragment>;
+  attrs: TransformedMeta;
+}
+
+const { record, attrs } = Astro.props;
+
+const unmaskedRecord = readFragment(PageLinkFragment, record);
+---
+
+<a {...attrs} href={buildUrlForPage(unmaskedRecord)} title={unmaskedRecord.title}><slot /></a>

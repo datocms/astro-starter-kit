@@ -3,18 +3,16 @@ import { graphql } from '~/lib/datocms/graphql';
 import Layout from '../../layouts/Layout.astro';
 import { TagFragment } from '~/lib/datocms/commonFragments';
 import { executeQuery } from '~/lib/datocms/executeQuery';
-import { StructuredText } from '@datocms/astro';
-
-import { HeadingWithAnchorLink } from '~/components/HeadingWithAnchorLink';
+import { Text } from '~/components/Text';
 
 import { isDraftModeEnabled } from '~/lib/draftMode';
 import { DraftModeQueryListener } from '~/components/DraftModeQueryListener';
 
-import { PageInline } from '~/components/inlineRecord/PageInline';
-import { PageInlineFragment } from '~/components/inlineRecord/PageInline/fragments';
+import { PageInline } from '~/components/inlineRecords/PageInline';
+import { PageInlineFragment } from '~/components/inlineRecords/PageInline/fragments';
 
-import { PageLink } from '~/components/linkToRecord/PageLink';
-import { PageLinkFragment } from '~/components/linkToRecord/PageLink/fragments';
+import { PageLink } from '~/components/linkToRecords/PageLink';
+import { PageLinkFragment } from '~/components/linkToRecords/PageLink/fragments';
 
 import { VideoBlock } from '~/components/blocks/VideoBlock';
 import { VideoBlockFragment } from '~/components/blocks/VideoBlock/fragments';
@@ -28,6 +26,11 @@ import { ImageGalleryBlockFragment } from '~/components/blocks/ImageGalleryBlock
 /**
  * The GraphQL query that will be executed for this route to generate the page
  * content and metadata.
+ *
+ * The page composes one query from the fragments exported by every
+ * sub-component it renders: the imports list mirrors the second argument of
+ * `graphql(...)` — adding `...FooFragment` to the query string means also
+ * adding `FooFragment` to the imports and to the composition array.
  *
  * Thanks to gql.tada, the result will be fully typed!
  */
@@ -111,45 +114,44 @@ if (!page) {
      * for editorial content, along with the capability to create hyperlinks
      * to other DatoCMS records and embed custom DatoCMS blocks.
      *
-     * The data-datocms-content-link-group attribute enables ContentLink to
-     * properly handle click-to-edit for structured text and embedded blocks.
+     * `<Text />` is the project-wide wrapper around `<StructuredText />` from
+     * `@datocms/astro`. It bakes in:
+     *   - the `data-datocms-content-link-group` attribute (required by Visual
+     *     Editing click-to-edit)
+     *   - default `nodeOverrides` (e.g. headings with anchor links)
+     *
+     * Per-route concerns — `blockComponents`, `inlineRecordComponents`,
+     * `linkToRecordComponents`, which depend on which models THIS specific
+     * structured-text field accepts — are still passed in here.
      */
   }
-  <div data-datocms-content-link-group>
-    <StructuredText
-      data={page.structuredText}
-      blockComponents={/*
-       * If the structured text embeds any blocks, it's up to you to decide
-       * how to render them:
-       */
-      {
-        ImageBlockRecord: ImageBlock,
-        ImageGalleryBlockRecord: ImageGalleryBlock,
-        VideoBlockRecord: VideoBlock,
-      }}
-      linkToRecordComponents={/*
-       * If the structured text includes a link to another DatoCMS record,
-       * it's your decision to determine where the link should lead, or if
-       * you wish to customize its appearance:
-       */
-      {
-        PageRecord: PageLink,
-      }}
-      inlineRecordComponents={/*
-       * If the structured text includes a reference to another DatoCMS
-       * record, it's up to you to decide how to render them:
-       */
-      {
-        PageRecord: PageInline,
-      }}
-      nodeOverrides={/*
-       * You can also override the default rendering of certain nodes.
-       * In this case, we want to tweak the way headings (h1-h6) are rendered.
-       */ {
-        heading: HeadingWithAnchorLink,
-      }}
-    />
-  </div>
+  <Text
+    data={page.structuredText}
+    blockComponents={/*
+     * If the structured text embeds any blocks, it's up to you to decide
+     * how to render them:
+     */
+    {
+      ImageBlockRecord: ImageBlock,
+      ImageGalleryBlockRecord: ImageGalleryBlock,
+      VideoBlockRecord: VideoBlock,
+    }}
+    linkToRecordComponents={/*
+     * If the structured text includes a link to another DatoCMS record,
+     * it's your decision to determine where the link should lead, or if
+     * you wish to customize its appearance:
+     */
+    {
+      PageRecord: PageLink,
+    }}
+    inlineRecordComponents={/*
+     * If the structured text includes a reference to another DatoCMS
+     * record, it's up to you to decide how to render them:
+     */
+    {
+      PageRecord: PageInline,
+    }}
+  />
   <footer>Published at {page._firstPublishedAt}</footer>
 
   <DraftModeQueryListener query={query} variables={{ slug }} />

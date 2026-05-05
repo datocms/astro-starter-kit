@@ -1,0 +1,24 @@
+---
+import { readFragment, type FragmentOf } from '~/lib/datocms/graphql';
+import { buildUrlForPage } from '~/lib/datocms/gqlUrlBuilder/page';
+import { PageInlineFragment } from './fragments';
+
+/*
+ * If a structured text includes a reference to another DatoCMS record, it's
+ * up to you to decide how to render them. The visual representation lives
+ * here; the URL is owned by the per-model URL builder, composed via the URL
+ * fragment.
+ */
+
+interface Props {
+  record: FragmentOf<typeof PageInlineFragment>;
+}
+
+const { record } = Astro.props;
+
+const unmaskedRecord = readFragment(PageInlineFragment, record);
+---
+
+<a href={buildUrlForPage(unmaskedRecord)} class="pill" data-datocms-content-link-boundary>
+  {unmaskedRecord.title}
+</a>

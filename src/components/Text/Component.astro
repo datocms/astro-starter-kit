@@ -1,0 +1,46 @@
+---
+import { StructuredText as DatoStructuredText } from '@datocms/astro';
+import type { ComponentProps } from 'astro/types';
+import { HeadingWithAnchorLink } from '~/components/HeadingWithAnchorLink';
+
+/**
+ * Project-wide wrapper around `<StructuredText />` from `@datocms/astro`,
+ * exposed as `<Text />` to distinguish it from the upstream component.
+ *
+ * Always render structured text through this component instead of importing
+ * `@datocms/astro` directly. Two reasons:
+ *
+ * 1. Every render needs `data-datocms-content-link-group` around it for
+ *    Visual Editing to resolve clickable areas correctly. Centralizing the
+ *    wrapper means no page can forget it.
+ *
+ * 2. Project-wide concerns — default node overrides for headings — are baked
+ *    in here, so every structured-text field renders consistently without
+ *    each caller restating them.
+ *
+ * Props are typed by borrowing from the upstream component, so this wrapper
+ * transparently accepts everything `<StructuredText />` does without
+ * maintaining a parallel prop list. Caller-provided `nodeOverrides` are
+ * spread AFTER the project defaults so callers can opt out of any default.
+ */
+
+type Props = ComponentProps<typeof DatoStructuredText>;
+
+const { nodeOverrides, ...props } = Astro.props;
+---
+
+<div data-datocms-content-link-group>
+  <DatoStructuredText
+    {...props}
+    nodeOverrides={/*
+     * You can also override the default rendering of certain nodes.
+     * In this case, we want to tweak the way headings (h1-h6) are rendered.
+     * Caller-provided overrides are spread AFTER the project defaults, so a
+     * specific page can still opt out of any default.
+     */
+    {
+      heading: HeadingWithAnchorLink,
+      ...nodeOverrides,
+    }}
+  />
+</div>

@@ -1,4 +1,5 @@
 import { graphql } from '~/lib/datocms/graphql';
+import { PageUrlFragment } from '~/lib/datocms/gqlUrlBuilder/page';
 
 /**
  * Let's define the GraphQL fragment needed for the component to function.
@@ -10,18 +11,25 @@ import { graphql } from '~/lib/datocms/graphql';
  * performant GraphQL implementations by allowing precise data fetching and
  * easier code management.
  *
+ * Routing fields (e.g. `slug`) are not declared here directly: instead, the
+ * fragment composes `PageUrlFragment` so that this component and the URL
+ * builder stay in sync as the routing scheme evolves.
+ *
  * Learn more: https://gql-tada.0no.co/guides/fragment-colocation
  */
 
-export const PageInlineFragment = graphql(/* GraphQL */ `
-  fragment PageInlineFragment on PageRecord {
-    ... on RecordInterface {
-      id
-      __typename
+export const PageLinkFragment = graphql(
+  /* GraphQL */ `
+    fragment PageLinkFragment on PageRecord {
+      ... on RecordInterface {
+        id
+        __typename
+      }
+      ... on PageRecord {
+        title
+        ...PageUrlFragment
+      }
     }
-    ... on PageRecord {
-      title
-      slug
-    }
-  }
-`);
+  `,
+  [PageUrlFragment],
+);
