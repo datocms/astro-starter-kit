@@ -2,6 +2,9 @@
   "name": "astro-starter-kit",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "prepare": "npx simple-git-hooks && npm run generate-schema && npm run generate-cma-types",
     "dev": "astro dev",
