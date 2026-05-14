@@ -8,7 +8,7 @@
  * See: https://www.datocms.com/docs/content-management-api/resources/item#type-safe-development-with-typescript
  */
 import type { RawApiTypes } from '@datocms/cma-client';
-import type { AnyModel } from './cma-types';
+import { type AnyModel, Page } from './cma-types';
 
 /*
  * Both the "Web Previews" and "SEO/Readability Analysis" plugins from DatoCMS
@@ -21,21 +21,25 @@ import type { AnyModel } from './cma-types';
  * - src/pages/api/preview-links/index.ts
  */
 
-export function recordToWebsiteRoute(
+export async function recordToWebsiteRoute(
   item: RawApiTypes.Item<AnyModel>,
-  itemTypeApiKey: string,
   locale: string,
-): string | null {
-  switch (itemTypeApiKey) {
-    case 'page': {
-      return `/page/${recordToSlug(item, itemTypeApiKey, locale)}`;
+): Promise<string | null> {
+  switch (item.__itemTypeId) {
+    case Page.ID: {
+      const slug = await recordToSlug(item, locale);
+      return slug ? `/page/${slug}` : null;
     }
     /*
-     * Add cases for other models as needed. For example, if you add an
-     * 'article' model with a 'slug' field:
+     * Add more cases here as you add more models to your DatoCMS schema.
+     * Switching on `item.__itemTypeId` and referencing the generated `.ID`
+     * constants gives TypeScript the discriminant it needs to narrow
+     * `item.attributes` to the right model. Always derive the slug via
+     * `recordToSlug()` so the two helpers stay in sync. Example:
      *
-     * case 'article': {
-     *   return `/blog/${recordToSlug(item, itemTypeApiKey, locale)}`;
+     * case Article.ID: {
+     *   const slug = await recordToSlug(item, locale);
+     *   return slug ? `/blog/${slug}` : null;
      * }
      */
     default:
@@ -43,25 +47,23 @@ export function recordToWebsiteRoute(
   }
 }
 
-export function recordToSlug(
+export async function recordToSlug(
   item: RawApiTypes.Item<AnyModel>,
-  itemTypeApiKey: string,
   _locale: string,
-): string | null {
-  switch (itemTypeApiKey) {
-    case 'page': {
+): Promise<string | null> {
+  switch (item.__itemTypeId) {
+    case Page.ID: {
       /*
-       * Using generated types, TypeScript knows which fields exist on each model.
-       * Access fields directly without type casting.
+       * Using generated types, TypeScript knows exactly which fields exist.
+       * `item.attributes.slug` is fully typed - no casts needed!
        */
       return item.attributes.slug;
     }
     /*
-     * Add cases for other models as needed. For example, if you add an
-     * 'article' model with a 'slug' field, regenerate types with
-     * `npm run generate-cma-types` and add:
+     * Add more cases here as you add more models to your DatoCMS schema.
+     * Example for an article model with a slug field:
      *
-     * case 'article': {
+     * case Article.ID: {
      *   return item.attributes.slug;
      * }
      */

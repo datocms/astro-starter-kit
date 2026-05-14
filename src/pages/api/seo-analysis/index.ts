@@ -60,9 +60,9 @@ export const GET: APIRoute = async ({ url }) => {
     const { data: item } = await client.items.rawFind<AnyModel>(itemId);
 
     // We can use this info to generate the frontend URL, and the page slug
-    const websitePath = recordToWebsiteRoute(item, itemTypeApiKey, locale);
+    const websitePath = await recordToWebsiteRoute(item, locale);
 
-    const slug = recordToSlug(item, itemTypeApiKey, locale);
+    const slug = await recordToSlug(item, locale);
 
     if (!websitePath) {
       return invalidRequestResponse(

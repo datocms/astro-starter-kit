@@ -39,10 +39,10 @@ export const POST: APIRoute = async ({ url, request }) => {
      * along with information about which locale they are currently viewing in
      * the interface
      */
-    const { item, itemType, locale } = await request.json();
+    const { item, locale } = await request.json();
 
     // We can use this info to generate the frontend URL associated
-    const recordUrl = recordToWebsiteRoute(item, itemType.attributes.api_key, locale);
+    const recordUrl = await recordToWebsiteRoute(item, locale);
 
     const response: WebPreviewsResponse = { previewLinks: [] };
 
