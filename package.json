@@ -21,7 +21,7 @@
     "@astrojs/check": "^0.9.8",
     "@astrojs/node": "^10.0.4",
     "@astrojs/react": "^5.0.3",
-    "@datocms/astro": "^0.6.12",
+    "@datocms/astro": "^0.6.13",
     "@datocms/cda-client": "^0.2.10",
     "@datocms/cma-client": "^5.4.18",
     "@mux/mux-player": "^3.10.1",
@@ -36,7 +36,7 @@
     "jsonwebtoken": "^9.0.3",
     "node-html-parser": "^7.0.1",
     "react": "^19.2.3",
-    "react-datocms": "^8.0.3",
+    "react-datocms": "^8.0.5",
     "react-dom": "^19.2.3",
     "serialize-error": "^12.0.0",
     "typescript": "^5.9.3"
