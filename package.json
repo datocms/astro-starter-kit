@@ -25,7 +25,7 @@
     "@datocms/cda-client": "^0.2.10",
     "@datocms/cma-client": "^5.4.18",
     "@mux/mux-player": "^3.13.0",
-    "@mux/mux-player-react":"^3.13.0",
+    "@mux/mux-player-react": "^3.13.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "astro": "^6.4.8",
