@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { SECRET_API_TOKEN } from 'astro:env/server';
 import { enableDraftMode } from '~/lib/draftMode';
-import { handleUnexpectedError, invalidRequestResponse, isRelativeUrl } from '../../utils';
+import { handleUnexpectedError, invalidRequestResponse, isSafeRedirectUrl } from '../../utils';
 
 /**
  * This route handler enables Draft Mode and redirects to the given URL.
@@ -20,7 +20,7 @@ export const GET: APIRoute = (event) => {
     }
 
     // Avoid open redirect vulnerabilities
-    if (!isRelativeUrl(redirectUrl)) {
+    if (!isSafeRedirectUrl(redirectUrl, url.hostname)) {
       return invalidRequestResponse('URL must be relative!', 422);
     }
 

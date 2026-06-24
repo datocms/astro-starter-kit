@@ -59,19 +59,21 @@ export function successfulResponse(data?: unknown, status = 200) {
   );
 }
 
-export function isRelativeUrl(path: string) {
+/**
+ * Guards against open redirect vulnerabilities.
+ *
+ * Rather than trying to enumerate every malicious pattern (`//evil.com`,
+ * `HTTP://evil.com`, leading whitespace, backslashes, encodings, …), we resolve
+ * the candidate against the current request's host and only accept it if it
+ * stays on the same hostname. Anything that resolves elsewhere — or fails to
+ * parse at all — is rejected.
+ */
+export function isSafeRedirectUrl(url: string, hostname: string): boolean {
   try {
-    // Try to create a URL object — if it succeeds without a base, it's absolute
-    new URL(path);
-    return false;
+    // The scheme is irrelevant here: we only compare hostnames.
+    const parsed = new URL(url, `http://${hostname}`);
+    return parsed.hostname === hostname;
   } catch {
-    try {
-      // Verify it can be parsed as a relative URL by providing a base
-      new URL(path, 'http://example.com');
-      return true;
-    } catch {
-      // If both attempts fail, it's not a valid URL at all
-      return false;
-    }
+    return false;
   }
 }
