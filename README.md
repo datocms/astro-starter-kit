@@ -104,7 +104,7 @@ When using the [Web Previews plugin](https://www.datocms.com/marketplace/plugins
 - **In-plugin navigation**: Users can navigate to different URLs within the Visual mode interface (like a browser navigation bar), and the preview automatically updates to show the corresponding page
 - **Synchronized state**: The preview and DatoCMS interface stay in perfect sync
 
-This bidirectional communication is established automatically when your preview runs inside the Web Previews plugin—no additional configuration needed.
+This bidirectional communication is established automatically when your preview runs inside the Web Previews plugin—no additional configuration needed **on the code side**. The plugin itself still needs to be installed and pointed at your app; see [Configuring Visual Editing manually](#configuring-visual-editing-manually) if you're not using the one-click marketplace deploy.
 
 ### How it works
 
@@ -115,6 +115,47 @@ The implementation consists of three parts:
 3. **Layout integration** (`src/layouts/Layout.astro:55`): The ContentLink component is rendered only in draft mode
 
 For more details, see the [package documentation](https://www.npmjs.com/package/@datocms/content-link).
+
+### Configuring Visual Editing manually
+
+When you deploy this starter through the [DatoCMS marketplace](https://dashboard.datocms.com/deploy?repo=datocms%2Fastro-starter-kit%3Amain), the Web Previews plugin (which powers Visual Editing) is installed and configured for you automatically by the [`src/pages/api/post-deploy/index.ts`](src/pages/api/post-deploy/index.ts) code.
+
+If you're **developing locally** or **deploying outside the one-click flow**, that step doesn't run, so you need to set the plugin up by hand. Here's how to reproduce it.
+
+#### 1. Make your app reachable from DatoCMS
+
+DatoCMS is a cloud service, and the Web Previews plugin runs inside the DatoCMS interface — not on your machine. When it needs preview links or wants to enable Draft Mode, **DatoCMS's own servers make an HTTP request to the URLs you configure here**. The traffic originates from DatoCMS in the cloud and has to travel _to_ your app.
+
+That's why `http://localhost:4321` doesn't work: `localhost` means "the machine making the request," so DatoCMS would be calling itself, not your dev server. For DatoCMS to reach your app, the app has to be available at a public internet address.
+
+- **Deployed app**: use its public URL (e.g. `https://your-app.example.com`).
+- **Local development**: put a tunnel in front of your dev server — e.g. `ngrok http 4321` or `cloudflared tunnel` — which gives you a public URL that forwards to your local server.
+
+In the steps below, replace `<BASE_URL>` with that public URL and `<SECRET>` with the value of your `SECRET_API_TOKEN` environment variable.
+
+#### 2. Install the Web Previews plugin
+
+In your DatoCMS project, go to **Settings > Plugins > Add a new plugin**, search for **Web Previews**, and install it.
+
+#### 3. Configure the plugin
+
+Open the plugin's settings and add a single frontend:
+
+| Setting                                    | Value                                             |
+| ------------------------------------------ | ------------------------------------------------- |
+| **Name**                                   | `Production`                                      |
+| **Preview webhook URL**                    | `<BASE_URL>/api/preview-links?token=<SECRET>`     |
+| **Enable draft mode URL** (Visual Editing) | `<BASE_URL>/api/draft-mode/enable?token=<SECRET>` |
+| **Initial path** (Visual Editing)          | `/`                                               |
+| **Start open**                             | enabled                                           |
+
+Both endpoints are guarded by `SECRET_API_TOKEN`; if the token in the URL doesn't match your environment variable, the requests are rejected.
+
+#### 4. Verify
+
+Open a record in DatoCMS and switch to the Web Previews / Visual Editing view. The preview should render, and the starter's click-to-edit interaction should work.
+
+> The same [`src/pages/api/post-deploy/index.ts`](src/pages/api/post-deploy/index.ts) code also configures other things (the SEO/Readability Analysis plugin and a bundled private plugin). If you're setting the project up by hand, treat that file as the authoritative reference for those too.
 
 ## VS Code
 
