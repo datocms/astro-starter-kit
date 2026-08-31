@@ -4,33 +4,6 @@ type EnvironmentSettings = {
   locales: 'en';
 };
 
-export type Page = ItemTypeDefinition<
-  EnvironmentSettings,
-  'JdG722SGTSG_jEB1Jx-0XA',
-  {
-    title: {
-      type: 'string';
-    };
-    structured_text: {
-      type: 'structured_text';
-      blocks: ImageGalleryBlock | ImageBlock | VideoBlock;
-    };
-    slug: {
-      type: 'slug';
-    };
-    seo_settings_social: {
-      type: 'seo';
-    };
-    seo_analysis: {
-      type: 'json';
-    };
-  }
->;
-export const Page = {
-  ID: 'JdG722SGTSG_jEB1Jx-0XA',
-  REF: { type: 'item_type', id: 'JdG722SGTSG_jEB1Jx-0XA' },
-} as const;
-
 export type ImageBlock = ItemTypeDefinition<
   EnvironmentSettings,
   'dZOhbVOTSpeaaA-wQMgPCA',
@@ -57,6 +30,33 @@ export type ImageGalleryBlock = ItemTypeDefinition<
 export const ImageGalleryBlock = {
   ID: 'CoOdvsbUR8GLtGeuenXzMw',
   REF: { type: 'item_type', id: 'CoOdvsbUR8GLtGeuenXzMw' },
+} as const;
+
+export type Page = ItemTypeDefinition<
+  EnvironmentSettings,
+  'JdG722SGTSG_jEB1Jx-0XA',
+  {
+    title: {
+      type: 'string';
+    };
+    structured_text: {
+      type: 'structured_text';
+      blocks: ImageGalleryBlock | ImageBlock | VideoBlock;
+    };
+    slug: {
+      type: 'slug';
+    };
+    seo_settings_social: {
+      type: 'seo';
+    };
+    seo_analysis: {
+      type: 'json';
+    };
+  }
+>;
+export const Page = {
+  ID: 'JdG722SGTSG_jEB1Jx-0XA',
+  REF: { type: 'item_type', id: 'JdG722SGTSG_jEB1Jx-0XA' },
 } as const;
 
 export type VideoBlock = ItemTypeDefinition<
