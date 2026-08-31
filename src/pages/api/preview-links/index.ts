@@ -24,13 +24,13 @@ type WebPreviewsResponse = {
  * https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews#the-previews-webhook
  */
 
-export const POST: APIRoute = async ({ url, request }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
-    // Parse query string parameters
-    const token = url.searchParams.get('token');
+    // The token is sent by the plugin as a request header (see /api/post-deploy)
+    const token = request.headers.get('authorization')?.replace(/^Bearer /, '');
 
     // Ensure that the request is coming from a trusted source
-    if (token !== SECRET_API_TOKEN) {
+    if (!token || token !== SECRET_API_TOKEN) {
       return invalidRequestResponse('Invalid token', 401);
     }
 

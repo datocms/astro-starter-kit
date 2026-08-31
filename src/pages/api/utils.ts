@@ -1,6 +1,3 @@
-import { ApiError } from '@datocms/cma-client';
-import { serializeError } from 'serialize-error';
-
 export function withCORS(responseInit?: ResponseInit): ResponseInit {
   return {
     ...responseInit,
@@ -18,25 +15,9 @@ export function json(response: unknown, init?: ResponseInit): Response {
 }
 
 export function handleUnexpectedError(error: unknown) {
-  try {
-    throw error;
-  } catch (e) {
-    console.error(e);
-  }
+  console.error(error);
 
-  if (error instanceof ApiError) {
-    return json(
-      {
-        success: false,
-        error: error.message,
-        request: error.request,
-        response: error.response,
-      },
-      withCORS({ status: 500 }),
-    );
-  }
-
-  return invalidRequestResponse(serializeError(error), 500);
+  return invalidRequestResponse('Internal server error', 500);
 }
 
 export function invalidRequestResponse(error: unknown, status = 422) {

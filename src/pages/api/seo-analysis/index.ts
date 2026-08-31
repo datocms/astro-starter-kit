@@ -27,13 +27,13 @@ type SeoAnalysis = {
  * https://www.datocms.com/marketplace/plugins/i/datocms-plugin-seo-readability-analysis#the-frontend-metadata-endpoint
  */
 
-export const GET: APIRoute = async ({ url }) => {
+export const GET: APIRoute = async ({ url, request }) => {
   try {
-    // Parse query string parameters
-    const token = url.searchParams.get('token');
+    // The token is sent by the plugin as a request header (see /api/post-deploy)
+    const token = request.headers.get('authorization')?.replace(/^Bearer /, '');
 
     // Ensure that the request is coming from a trusted source
-    if (token !== SECRET_API_TOKEN) {
+    if (!token || token !== SECRET_API_TOKEN) {
       return invalidRequestResponse('Invalid token', 401);
     }
 
