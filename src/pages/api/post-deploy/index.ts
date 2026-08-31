@@ -1,7 +1,12 @@
 import { type Client, buildClient } from '@datocms/cma-client';
 import type { APIRoute } from 'astro';
-import { SECRET_API_TOKEN } from 'astro:env/server';
-import { handleUnexpectedError, successfulResponse, withCORS } from '../utils';
+import { DATOCMS_CMA_TOKEN, SECRET_API_TOKEN } from 'astro:env/server';
+import {
+  handleUnexpectedError,
+  invalidRequestResponse,
+  successfulResponse,
+  withCORS,
+} from '../utils';
 
 /*
  * This endpoint is called only once, immediately after the initial deployment of
@@ -74,6 +79,22 @@ async function installPrivatePlugin(client: Client, baseUrl: string) {
   });
 }
 
+/**
+ * The DatoCMS API token arrives in the request body, so without this check the
+ * endpoint would happily write our SECRET_API_TOKEN into any project a caller
+ * names, and the caller could then read it back from their own project.
+ */
+async function ensureSameProject(client: Client, ourApiToken: string) {
+  const ourClient = buildClient({ apiToken: ourApiToken });
+
+  const [callerProject, ourProject] = await Promise.all([
+    client.site.find(),
+    ourClient.site.find(),
+  ]);
+
+  return callerProject.id === ourProject.id;
+}
+
 export const POST: APIRoute = async ({ request }) => {
   const body = await request.json();
 
@@ -81,6 +102,10 @@ export const POST: APIRoute = async ({ request }) => {
   const baseUrl = body.frontendUrl as string;
 
   try {
+    if (!(await ensureSameProject(client, DATOCMS_CMA_TOKEN))) {
+      return invalidRequestResponse('Invalid token', 401);
+    }
+
     await Promise.all([
       installWebPreviewsPlugin(client, baseUrl),
       installSEOAnalysisPlugin(client, baseUrl),
