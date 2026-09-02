@@ -22,16 +22,17 @@
       "type": "datocmsProjectUrl"
     },
     "SECRET_API_TOKEN": {
-      "type": "string",
-      "value": "secretTokenProtectingWebhookEndpointsFromBeingCalledByAnyone"
+      "type": "secret",
+      "format": "readable",
+      "label": "Draft Mode password",
+      "description": "You'll need it to turn on Draft Mode from the website."
     },
     "DRAFT_MODE_COOKIE_NAME": {
       "type": "string",
       "value": "__draftMode"
     },
     "SIGNED_COOKIE_JWT_SECRET": {
-      "type": "string",
-      "value": "someSecretString"
+      "type": "secret"
     }
   },
   "livePreviewUrl": "https://datocms-astro-starter-kit.vercel.app/",
