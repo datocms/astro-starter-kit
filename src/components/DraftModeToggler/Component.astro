@@ -1,10 +1,13 @@
 ---
+import { DRAFT_MODE_DEMO_PASSWORD } from 'astro:env/server';
 import { isDraftModeEnabled } from '~/lib/draftMode';
 
 const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
 ---
 
-<draft-mode-toggler data-enabled={draftModeEnabled ? 'true' : 'false'}></draft-mode-toggler>
+<draft-mode-toggler
+  data-enabled={draftModeEnabled ? 'true' : 'false'}
+  data-demo-password={DRAFT_MODE_DEMO_PASSWORD}></draft-mode-toggler>
 
 <script>
   class DraftModeToggler extends HTMLElement {
@@ -29,7 +32,10 @@ const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
       if (this.isDraftModeEnabled) {
         response = await fetch('/api/draft-mode/disable');
       } else {
-        const token = prompt('To enter Draft Mode, you need to insert the SECRET_API_TOKEN:');
+        const token = prompt(
+          'To enter Draft Mode, you need to insert the SECRET_API_TOKEN:',
+          this.dataset.demoPassword,
+        );
         if (!token) {
           return;
         }
