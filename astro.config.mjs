@@ -37,6 +37,11 @@ export default defineConfig({
         context: 'server',
         access: 'secret',
       }),
+      DRAFT_MODE_DEMO_PASSWORD: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
       DRAFT_MODE_COOKIE_NAME: envField.string({
         context: 'client',
         access: 'public',
