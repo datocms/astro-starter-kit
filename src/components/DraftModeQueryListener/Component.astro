@@ -18,15 +18,13 @@ type Props<QueryResult, QueryVariables> = Omit<
 const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
 ---
 
-{
-  draftModeEnabled && (
-    <QueryListener
-      {...Astro.props}
-      token={DATOCMS_DRAFT_CONTENT_CDA_TOKEN}
-      excludeInvalid
-      includeDrafts
-      contentLink="v1"
-      baseEditingUrl={DATOCMS_BASE_EDITING_URL}
-    />
-  )
-}
+{draftModeEnabled && (
+  <QueryListener
+    {...Astro.props}
+    token={DATOCMS_DRAFT_CONTENT_CDA_TOKEN}
+    excludeInvalid
+    includeDrafts
+    contentLink="v1"
+    baseEditingUrl={DATOCMS_BASE_EDITING_URL}
+  />
+)}

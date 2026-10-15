@@ -7,7 +7,8 @@ const draftModeEnabled = isDraftModeEnabled(Astro.cookies);
 
 <draft-mode-toggler
   data-enabled={draftModeEnabled ? 'true' : 'false'}
-  data-demo-password={DRAFT_MODE_DEMO_PASSWORD}></draft-mode-toggler>
+  data-demo-password={DRAFT_MODE_DEMO_PASSWORD}
+></draft-mode-toggler>
 
 <script>
   class DraftModeToggler extends HTMLElement {

@@ -43,8 +43,7 @@ const result = await executeQuery(query, { includeDrafts: draftModeEnabled });
     <Seo data={[...result._site.faviconMetaTags, ...additionalSeo]} />
   </head>
   <body>
-    {
-      /*
+    {/*
 
       ContentLink component enables click-to-edit overlays for DatoCMS content.
 
@@ -86,8 +85,7 @@ const result = await executeQuery(query, { includeDrafts: draftModeEnabled });
       @see https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews
       @see https://www.npmjs.com/package/@datocms/content-link
 
-      */
-    }
+      */}
     {draftModeEnabled && <ContentLink enableClickToEdit={{ hoverOnly: true }} />}
 
     <header>

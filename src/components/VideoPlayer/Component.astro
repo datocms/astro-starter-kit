@@ -13,8 +13,7 @@ const { data, ...rest } = Astro.props;
 const unmaskedData = readFragment(VideoPlayerFragment, data);
 ---
 
-{
-  /*
+{/*
     This component is a wrapper for the <VideoPlayer />` component provided by
     react-datocms, optimized for use with graphql.tada. We define the necessary
     GraphQL fragment for this component to function only once, then reuse it
@@ -22,8 +21,7 @@ const unmaskedData = readFragment(VideoPlayerFragment, data);
 
     The `client:visible` prop is used to ensure that the component loads and
     hydrates once the component has entered the user’s viewport.
-  */
-}
+  */}
 
 <div data-datocms-content-link-source={unmaskedData.video.alt}>
   <VideoPlayer {...rest} data={unmaskedData.video} accentColor="var(--bg-accent)" client:visible />
