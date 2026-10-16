@@ -107,50 +107,54 @@ if (!page) {
 
 <Layout additionalSeo={page._seoMetaTags}>
   <h1>{page.title}</h1>
-  {
-    /*
-     * Structured Text is a JSON format similar to HTML, but with the advantage
-     * of a significantly reduced and tailored set of possible tags
-     * for editorial content, along with the capability to create hyperlinks
-     * to other DatoCMS records and embed custom DatoCMS blocks.
-     *
-     * `<Text />` is the project-wide wrapper around `<StructuredText />` from
-     * `@datocms/astro`. It bakes in:
-     *   - the `data-datocms-content-link-group` attribute (required by Visual
-     *     Editing click-to-edit)
-     *   - default `nodeOverrides` (e.g. headings with anchor links)
-     *
-     * Per-route concerns — `blockComponents`, `inlineRecordComponents`,
-     * `linkToRecordComponents`, which depend on which models THIS specific
-     * structured-text field accepts — are still passed in here.
-     */
-  }
+  {/*
+   * Structured Text is a JSON format similar to HTML, but with the advantage
+   * of a significantly reduced and tailored set of possible tags
+   * for editorial content, along with the capability to create hyperlinks
+   * to other DatoCMS records and embed custom DatoCMS blocks.
+   *
+   * `<Text />` is the project-wide wrapper around `<StructuredText />` from
+   * `@datocms/astro`. It bakes in:
+   *   - the `data-datocms-content-link-group` attribute (required by Visual
+   *     Editing click-to-edit)
+   *   - default `nodeOverrides` (e.g. headings with anchor links)
+   *
+   * Per-route concerns — `blockComponents`, `inlineRecordComponents`,
+   * `linkToRecordComponents`, which depend on which models THIS specific
+   * structured-text field accepts — are still passed in here.
+   */}
   <Text
     data={page.structuredText}
-    blockComponents={/*
-     * If the structured text embeds any blocks, it's up to you to decide
-     * how to render them:
-     */
-    {
-      ImageBlockRecord: ImageBlock,
-      ImageGalleryBlockRecord: ImageGalleryBlock,
-      VideoBlockRecord: VideoBlock,
-    }}
-    linkToRecordComponents={/*
-     * If the structured text includes a link to another DatoCMS record,
-     * it's your decision to determine where the link should lead, or if
-     * you wish to customize its appearance:
-     */
-    {
-      PageRecord: PageLink,
-    }}
-    inlineRecordComponents={/*
-     * If the structured text includes a reference to another DatoCMS
-     * record, it's up to you to decide how to render them:
-     */
-    {
-      PageRecord: PageInline,
-    }}
+    blockComponents={
+      /*
+       * If the structured text embeds any blocks, it's up to you to decide
+       * how to render them:
+       */
+      {
+        ImageBlockRecord: ImageBlock,
+        ImageGalleryBlockRecord: ImageGalleryBlock,
+        VideoBlockRecord: VideoBlock,
+      }
+    }
+    linkToRecordComponents={
+      /*
+       * If the structured text includes a link to another DatoCMS record,
+       * it's your decision to determine where the link should lead, or if
+       * you wish to customize its appearance:
+       */
+      {
+        PageRecord: PageLink,
+      }
+    }
+    inlineRecordComponents={
+      /*
+       * If the structured text includes a reference to another DatoCMS
+       * record, it's up to you to decide how to render them:
+       */
+      {
+        PageRecord: PageInline,
+      }
+    }
   />
   <footer>Published at {page._firstPublishedAt}</footer>
 

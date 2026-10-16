@@ -24,4 +24,6 @@ const { record, attrs } = Astro.props;
 const unmaskedRecord = readFragment(PageLinkFragment, record);
 ---
 
-<a {...attrs} href={buildUrlForPage(unmaskedRecord)} title={unmaskedRecord.title}><slot /></a>
+<a {...attrs} href={buildUrlForPage(unmaskedRecord)} title={unmaskedRecord.title}>
+  <slot />
+</a>
