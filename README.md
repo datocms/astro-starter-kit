@@ -161,6 +161,35 @@ Open a record in DatoCMS and switch to the Web Previews / Visual Editing view. T
 
 > The same [`src/pages/api/post-deploy/index.ts`](src/pages/api/post-deploy/index.ts) code also configures other things (the SEO/Readability Analysis plugin and a bundled private plugin). If you're setting the project up by hand, treat that file as the authoritative reference for those too.
 
+## How the preview links are built
+
+The [Web Previews plugin](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) calls [`/api/preview-links`](src/pages/api/preview-links/index.ts) whenever you open a record, and shows the links it returns in the record sidebar. Which links you get depends on the record's status:
+
+| Record status | What it means                             | Links returned                              |
+| ------------- | ----------------------------------------- | ------------------------------------------- |
+| `draft`       | Never published                           | **Draft version**                           |
+| `published`   | No changes since the last publish         | **Published version**                       |
+| `updated`     | Published, with changes not yet published | **Draft version** and **Published version** |
+
+The plugin sends the endpoint only the _current_ version of the record, the one you're editing. That's all the **Draft version** link needs. For an `updated` record, though, the current version can disagree with what's live: if you changed a field the URL depends on (typically the slug), it gives you the new URL, while the published site still serves the old one.
+
+For example, say you change a page's slug from `about` to `about-us` and don't publish yet. The draft is at `/page/about-us`, but the published page is still at `/page/about`. A **Published version** link built from the current version would point to `/page/about-us` and end in a 404.
+
+So, for `updated` records only, the endpoint also fetches the published version of the record from the Content Management API, and builds the **Published version** link from it:
+
+```ts
+const { data: publishedItem } = await client.items.rawFind<AnyModel>(item.id, {
+  version: 'published',
+});
+```
+
+Some details worth knowing:
+
+- The request uses the `DATOCMS_CMA_TOKEN` token (CMA Only (Read)) and the environment the plugin is running in (`environmentId`), so it works in sandbox environments too.
+- `draft` and `published` records don't trigger it: either there's no published version, or it matches the current one.
+- If the request fails (for example, because `DATOCMS_CMA_TOKEN` isn't set), the error is logged and the **Published version** link falls back to the current URL. You still get both links, but the published one may 404 if the slug changed.
+- Both links go through `recordToWebsiteRoute()` in [`src/lib/datocms/recordInfo.ts`](src/lib/datocms/recordInfo.ts). When you add a model there, its preview links handle the `updated` case without further changes.
+
 ## VS Code
 
 It is highly recommended to follow [these instructions](https://gql-tada.0no.co/get-started/installation#vscode-setup) for an optimal experience with Visual Studio Code, including features like diagnostics, auto-completions, and type hovers for GraphQL.
