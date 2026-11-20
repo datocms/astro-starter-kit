@@ -148,12 +148,15 @@ Open the plugin's settings and add a single frontend:
 | Setting                                    | Value                                             |
 | ------------------------------------------ | ------------------------------------------------- |
 | **Name**                                   | `Production`                                      |
-| **Preview webhook URL**                    | `<BASE_URL>/api/preview-links?token=<SECRET>`     |
+| **Preview webhook URL**                    | `<BASE_URL>/api/preview-links`                    |
+| **Custom headers** (Preview webhook)       | Name `Authorization`, value `Bearer <SECRET>`     |
 | **Enable draft mode URL** (Visual Editing) | `<BASE_URL>/api/draft-mode/enable?token=<SECRET>` |
 | **Initial path** (Visual Editing)          | `/`                                               |
 | **Start open**                             | enabled                                           |
 
-Both endpoints are guarded by `SECRET_API_TOKEN`; if the token in the URL doesn't match your environment variable, the requests are rejected.
+Both endpoints are guarded by `SECRET_API_TOKEN`. The preview webhook reads it from the `Authorization` header, and the enable draft mode URL from the `token` query parameter. If the token doesn't match your environment variable, the requests are rejected. The draft mode URL keeps the token in the query string because editors open it in the browser, where they can't set headers.
+
+> **Set up before 2026-08-31?** Older versions of this starter read the token from the preview webhook URL. If your plugin settings still have `?token=` on the preview webhook URL, the sidebar previews fail with `401`. Remove the `token` parameter from that URL and add the `Authorization` custom header as shown above. Do the same for the SEO/Readability Analysis plugin: it also reads the token from the `Authorization` header now. The old URLs exposed the token in logs and in the plugin settings, so also rotate `SECRET_API_TOKEN`.
 
 #### 4. Verify
 
